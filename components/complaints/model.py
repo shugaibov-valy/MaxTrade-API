@@ -48,8 +48,6 @@ class Complaint(Base):
         return complaint
 
 
-
-
     #метод для создания жалобы
     @classmethod
     def create_complaint(cls, title: str, longitude: str, latitude: str, desc: str, category: str, user_id: int, problemImageURL: str):

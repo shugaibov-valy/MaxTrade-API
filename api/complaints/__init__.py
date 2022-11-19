@@ -23,6 +23,15 @@ async def create_complaint(request):
     return json({'result': 'success',
                 'complaintId': complaint.id})
 
+
+### выгрузка жалобу по ее id из БД
+@api_complaints.route('/get_by_id', methods=['POST'])
+async def get_by_id(request):
+    complaintId = request.json.get('complaintId')
+    complaint = Complaint.get_by_id(complaintId)
+    return json({'result': complaint.to_json()})
+
+
 ### выгрузка жалоб определенного пользователя по user_id
 @api_complaints.route('/complaints_of_user', methods=['POST'])
 async def create_complaint(request):
@@ -42,9 +51,7 @@ async def all_complaints(request):
 @api_complaints.route("/like_complaint", methods=['POST'])
 async def like_complaint(request):
     complaint_id = request.json.get('complaintId')
-    print(complaint_id)
     complaint = Complaint.get_by_id(complaint_id)
-    print(complaint)
     complaint.count_like += 1
     session.commit()
     return json({'result': "success"})
