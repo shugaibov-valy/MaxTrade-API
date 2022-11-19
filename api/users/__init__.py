@@ -18,8 +18,9 @@ async def reg(request):
         return json({'result': 'failed', 
                     'message': 'login is busy'})   #### логин существует
     except RegLoginUserNotFound:                    ###  если не сущетсвует, то создаем его
-        User.create_user(email, login, password)
-        return json({'result': 'success'})
+        user = User.create_user(email, login, password)
+        return json({'result': 'success',
+                    'authorId': user.id})
 
 
 ### авторизация пользователя по логину и паролю
@@ -31,9 +32,11 @@ async def auth(request):
         user = User.get_user(login, password)
         if user.is_admin:
             return json({'result': 'success',
-                        'is_admin': user.is_admin})    ### проверка если это минстрой или обычный пользователь
+                        'is_admin': user.is_admin,
+                        'authorId': user.id})    ### проверка если это минстрой или обычный пользователь
         return json({'result': 'success', 
-                    'is_admin': user.is_admin}) ### пользователь существует
+                    'is_admin': user.is_admin,
+                    'authorId': user.id}) ### пользователь существует
     except AuthLoginUserNotFound:
         return json({'result': 'failed', 
                     'message': 'not found user'})

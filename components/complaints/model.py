@@ -16,6 +16,7 @@ class Complaint(Base):
     desc: str = sq.Column(sq.String)
     mess_of_minstroy: str = sq.Column(sq.String)
     category: str = sq.Column(sq.String)
+    problemImageURL: str = sq.Column(sq.String)
     is_satisfied: bool = sq.Column(sq.Boolean, unique=False, default=False)
     created_at = sq.Column(sq.DateTime, server_default=func.now())
     user_id: int  = sq.Column(sq.Integer, sq.ForeignKey('users.id'))        ### id создателя, пользователя
@@ -26,24 +27,26 @@ class Complaint(Base):
             "title": self.title,
             "longitude": self.longitude,
             "latitude": self.latitude,
-            "address": self.address,
-            "desc": self.desc,
-            "mess_of_minstroy": self.mess_of_minstroy,
-            "category": self.category,
-            "is_satisfied": self.is_satisfied,
-            "created_at": str(self.created_at)
+            "streetName": self.address,
+            "description": self.desc,
+            "minDescription": self.mess_of_minstroy,
+            "problemImageURL": self.problemImageURL,
+            "type": self.category,
+            "isDecided": self.is_satisfied,
+            "date": str(self.created_at)
         }
 
     #метод для создания жалобы
     @classmethod
-    def create_complaint(cls, title: str, longitude: str, latitude: str, desc: str, category: str, user_id: int):
+    def create_complaint(cls, title: str, longitude: str, latitude: str, desc: str, category: str, user_id: int, problemImageURL: str):
         complaint = cls(title=title, 
                         longitude=longitude, 
                         latitude=latitude, 
                         address=coords_to_address(longitude, latitude), 
                         desc=desc, 
                         category=category, 
-                        user_id=user_id)
+                        user_id=user_id,
+                        problemImageURL=problemImageURL)
         session.add(complaint)
         session.commit()
         return complaint
@@ -53,6 +56,12 @@ class Complaint(Base):
     @classmethod
     def comlaints_by_user_id(cls, user_id):
         comlaints = session.query(cls).filter(cls.user_id == user_id).all()
+        return comlaints
+
+    # метод для выгрузки всех жалоб
+    @classmethod
+    def all_comlaints(cls):
+        comlaints = session.query(cls).all()
         return comlaints
         
 
