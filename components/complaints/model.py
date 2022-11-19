@@ -25,6 +25,7 @@ class Complaint(Base):
 
     def to_json(self):
         return {
+            "id": self.id,
             "title": self.title,
             "longitude": self.longitude,
             "latitude": self.latitude,
@@ -34,6 +35,7 @@ class Complaint(Base):
             "problemImageURL": self.problemImageURL,
             "type": self.category,
             "count_like": self.count_like,
+            "authorId": self.user_id,
             "isDecided": self.is_satisfied,
             "date": str(self.created_at)
         }
