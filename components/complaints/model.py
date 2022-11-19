@@ -18,6 +18,7 @@ class Complaint(Base):
     category: str = sq.Column(sq.String)
     problemImageURL: str = sq.Column(sq.String)
     is_satisfied: bool = sq.Column(sq.Boolean, unique=False, default=False)
+    count_like: int = sq.Column(sq.Integer, default=0)
     created_at = sq.Column(sq.DateTime, server_default=func.now())
     user_id: int  = sq.Column(sq.Integer, sq.ForeignKey('users.id'))        ### id создателя, пользователя
     user = relationship("User", foreign_keys=[user_id])
@@ -32,9 +33,20 @@ class Complaint(Base):
             "minDescription": self.mess_of_minstroy,
             "problemImageURL": self.problemImageURL,
             "type": self.category,
+            "count_like": self.count_like,
             "isDecided": self.is_satisfied,
             "date": str(self.created_at)
         }
+
+
+    ### получение жалобы по ее id в БД
+    @classmethod
+    def get_by_id(cls, comlaint_id):
+        complaint = session.query(cls).filter(cls.id == comlaint_id).first()
+        return complaint
+
+
+
 
     #метод для создания жалобы
     @classmethod
