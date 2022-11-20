@@ -2,6 +2,7 @@ from db import Base, session
 import sqlalchemy as sq
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
+from geocoder import coords_to_address
 
 
 class Mark(Base):
@@ -10,6 +11,7 @@ class Mark(Base):
     id = sq.Column(sq.Integer, primary_key=True)
     longitude: float = sq.Column(sq.Float)
     latitude: float = sq.Column(sq.Float)
+    address: str = sq.Column(sq.String)
     description: str = sq.Column(sq.String)
     date: str = sq.Column(sq.DateTime, server_default=func.now())
 
@@ -19,6 +21,7 @@ class Mark(Base):
             "id": self.id,
             "longitude": self.longitude,
             "latitude": self.latitude,
+            "streetName": self.address,
             "description": self.description,
             "date": str(self.date)
         }
@@ -27,7 +30,7 @@ class Mark(Base):
     #метод для создания метки
     @classmethod
     def create_mark(cls, longitude: str, latitude: str, description: str):
-        mark = cls(longitude=longitude, latitude=latitude, description=description)
+        mark = cls(longitude=longitude, latitude=latitude, description=description, address=coords_to_address(longitude, latitude))
         session.add(mark)
         session.commit()
         return mark
