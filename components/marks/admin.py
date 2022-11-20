@@ -1,12 +1,12 @@
 from flask_admin.contrib.sqla import ModelView
-from components.users.model import User
+from components.marks.model import Mark
 from flask import session
 
 
-class UserView(ModelView): 
+class MarkView(ModelView):
     create_modal = True
     edit_modal = True
 
 
 def load_views(admin, session):
-    admin.add_view(UserView(User, session))
+    admin.add_view(MarkView(Mark, session))

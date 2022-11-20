@@ -18,6 +18,7 @@ def admin_start():
     admin = Admin(app, name='MaxTrade-DB', template_mode='bootstrap3')
     users_view.load_views(admin, db_session)
     complaints_view.load_views(admin, db_session)
+    marks_view.load_views(admin, db_session)
 
     app.config.from_object(config)
     app.run(debug=config.DEBUG, host=config.HOST, port=8001)
