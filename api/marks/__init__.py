@@ -38,7 +38,7 @@ async def all_marks(request):
 ### записываем новое описание метки
 @api_marks.route('/update_mark', methods=['POST'])
 async def update_mark(request):
-    markId = request.json.get('markId')
+    mark_id = request.json.get('markId')
     description = request.json.get('description')
     mark = Mark.get_by_id(mark_id)
     mark.description = description
