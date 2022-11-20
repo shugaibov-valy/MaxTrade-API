@@ -32,7 +32,7 @@ class Complaint(Base):
             "streetName": self.address,
             "description": self.desc,
             "minDescription": self.mess_of_minstroy,
-            "problemImageURL": self.problemImageURL,
+            "problemImageUrl": self.problemImageURL,
             "type": self.category,
             "count_like": self.count_like,
             "authorId": self.user_id,
